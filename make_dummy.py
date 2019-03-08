@@ -7,17 +7,18 @@ from selenium.webdriver.support import expected_conditions as EC
 def sign_up(driver, id, pw):
 	sign_up_url = "/bbs/lo_join.php?mb_id="+ id +"&mb_password="+ pw
 	driver.get(domain.do4 + sign_up_url)
-	#WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, "div.mbskin")))
 	WebDriverWait(driver, 100).until(EC.alert_is_present())
 	alert = driver.switch_to.alert
 	alert.accept()
+	print("회원가입 완료!")
 
 def login(driver,id, pw):
-	driver.get(domain.do4)
+	#driver.get(domain.do5)
 	WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CSS_SELECTOR, "div.mbskin")))
 	driver.find_element_by_name("mb_id").send_keys(id)
 	driver.find_element_by_name("mb_password").send_keys(pw)
 	driver.find_element_by_css_selector('input.btn_submit').click()
+	print("로그인 완료!")
 
 def charge_req(driver, name, price):
 	driver.get(domain.do4 + domain.charge)

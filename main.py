@@ -4,7 +4,7 @@ from selenium import webdriver
 
 def driver_load():
 	options = webdriver.ChromeOptions()
-	#options.add_argument('headless')
+	options.add_argument('headless')
 	options.add_argument('window-size=1920x1080')
 	options.add_argument("disable-gpu")
 	options.add_argument("lang=ko_KR")
@@ -12,38 +12,40 @@ def driver_load():
 	driver = webdriver.Chrome('./chromedriver', chrome_options=options)
 	driver.get('about:blank')
 	driver.execute_script("Object.defineProperty(navigator, 'plugins', {get: function() {return[1, 2, 3, 4, 5]}})")
-	# lanuages 속성을 업데이트해주기
 	driver.execute_script("Object.defineProperty(navigator, 'languages', {get: function() {return ['ko-KR', 'ko']}})")
 	driver.implicitly_wait(3)
 	return driver
 
 if __name__ == '__main__':
-	#while(True):
-	for i in range(2):
+	for i in range(1,10000):
 		try:
 			driver = driver_load()
+			print("############## " + str(i) + " 번째 ##############")
 			fid = random_id_pw()
 			fpw = random_id_pw()
 			name = random_name()
 			price = random_price()
 			s_price = random_small_price()
 			munsang_list = random_munsang()
-
 			sign_up(driver, fid, fpw)
 			login(driver, fid, fpw)
-			charge_req(driver, name, price)
-			munsang_req(driver, s_price, munsang_list)
+			flag = random.choice([0,1,2,3])
+			if flag == 1 or flag == 3:
+				charge_req(driver, name, price)
+				print("1. 허위 입금 정보 주입!")
+			if flag == 2 or flag == 3:
+				munsang_req(driver, s_price, munsang_list)
+				print("2. 허위 문상 충천 정보 주입!")
 			driver.quit()
-
 		except Exception as e:
 			print("실패")
 			print(e)
 			continue
 		finally:
+			print("------------------------------------------")
 			print("ID : [" + fid + "]")
 			print("PW : [" + fpw + "]")
 			print("가명 : [" + name + "]")
 			print("충전가격 : [" + price + "]")
 			print("문상충전가격 : [" + s_price + "]")
 			print("문상번호 : [" + "-".join(munsang_list) + "]")
-
